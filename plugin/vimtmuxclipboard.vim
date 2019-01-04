@@ -19,6 +19,14 @@ function! s:Enable()
     return
   endif
 
+  " These keeps last two tmux buffer names. If TmuxBufferName() and lastbname
+  " differ, this means tmux made some copies in other panes, creating new
+  " buffer(s). If these two are same, but lastbname and prevbname are
+  " different, this means tmux made a copy in the same pane: New buffer is
+  " created before FocusLost can accurately update lastbname. Therefore,
+  " FocusLost sets lastbname to newly created buffer. Lastly, when vim is
+  " yanking to tmux buffer, prevbname is set to lastbname to avoid another copy
+  " due to new buffer created as a result of this yank.
   let s:lastbname=""
   let s:prevbname=""
 
